@@ -9,23 +9,23 @@ Plugin.create(:tweet_stack) do
   end
   command(:tweet_stack,
           name: 'tweet stack',
-	  condition: lambda{ |opt| true },
-	  visible: true,
-	  role: :postbox) do |opt|
+          condition: lambda{ |opt| true },
+          visible: true,
+          role: :postbox) do |opt|
     post_val = Plugin.create(:gtk).widgetof(opt.widget).widget_post.buffer.text
 
     if stack == nil then
       if post_val != '' then
         stack = post_val
         Plugin.create(:gtk).widgetof(opt.widget).widget_post.buffer.text = ''
-	"「#{stack}」をstackしました。".sys_mes
+        "「#{stack}」をstackしました。".sys_mes
       else
         '投稿ボックスが空なのでstackできません。'.sys_mes
       end
     else
       if post_val == '' then
         Plugin.create(:gtk).widgetof(opt.widget).widget_post.buffer.text = stack
-	stack = nil
+        stack = nil
       else
         '投稿ボックスが空でないのでstackを戻せません。'.sys_mes
       end
