@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+# Copyright 2013, pocket
+# Licensed MIT
+# http://opensource.org/licenses/mit-license.php
+
 Plugin.create(:tweet_stack) do
 
   stack = Array.new
