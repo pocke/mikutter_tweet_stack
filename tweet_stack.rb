@@ -7,8 +7,9 @@
 Plugin.create(:tweet_stack) do
 
   stack = Array.new
-  def sys_mes mes
-    Plugin.call(:update, nil, [Message.new(:message => mes, :system => true)])
+
+  def sys_mes msg
+    Plugin.call(:update, nil, [Message.new(:message => msg, :system => true)])
   end
 
   command(:tweet_stack,
@@ -16,17 +17,17 @@ Plugin.create(:tweet_stack) do
            condition: lambda{ |opt| true },
            visible: true,
            role: :postbox) do |opt|
-    post_val = Plugin.create(:gtk).widgetof(opt.widget).widget_post.buffer.text
-    if post_val != '' then
-      stack << post_val
+    text = Plugin.create(:gtk).widgetof(opt.widget).widget_post.buffer.text
+    if text.empty? then
+      if stack.empty? then
+        sys_mes 'stackが空です'
+      else
+        Plugin.create(:gtk).widgetof(opt.widget).widget_post.buffer.text = stack.pop
+      end
+    else
+      stack.push text
       Plugin.create(:gtk).widgetof(opt.widget).widget_post.buffer.text = ''
       sys_mes "「#{stack}」が積まれています"
-    else
-      if stack[0] then
-        Plugin.create(:gtk).widgetof(opt.widget).widget_post.buffer.text = stack.pop
-      else
-        sys_mes 'stackが空です'
-      end
     end
   end
 
